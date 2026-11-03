@@ -1,0 +1,21 @@
+# 密钥与本地配置
+.env
+.env.*
+!.env.example
+
+# 依赖与缓存
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.npm-cache/
+
+# 产物
+out/
+dist/
+build/
+*.log
+~$*
+.DS_Store
+Thumbs.db

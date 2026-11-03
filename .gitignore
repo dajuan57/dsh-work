@@ -3,8 +3,13 @@
 .env.*
 !.env.example
 
+# 子项目各自是独立仓库，父仓库不跟踪；模板本身要保留
+projects/*
+!projects/_template/
+
 # 便携工具与缓存
 tools/
+.venv/
 node_modules/
 .npm-cache/
 __pycache__/

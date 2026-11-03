@@ -28,6 +28,13 @@ if (Test-Path $Py) {
     Add-Result 'Python' $r.ok $r.out
 } else { Add-Result 'Python' $false "未找到 $Py" }
 
+# 1b. 共享 venv（工作台根目录 .venv；pip 只能用 -m pip 调）
+$VenvPy = 'C:\Users\mazix\work\.venv\Scripts\python.exe'
+if (Test-Path $VenvPy) {
+    $r = Try-Run $VenvPy @('-m', 'pip', '--version')
+    Add-Result 'venv + pip' $r.ok $r.out
+} else { Add-Result 'venv + pip' $false "未找到 $VenvPy" }
+
 # 2. Node / pnpm
 if (Test-Path $Node) {
     $r = Try-Run $Node @('-v'); Add-Result 'Node' $r.ok $r.out
