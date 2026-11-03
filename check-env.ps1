@@ -1,6 +1,6 @@
 <#
     环境自检 —— 检查 DSH 工作台的工具链是否可用
-    用法：powershell -NoProfile -ExecutionPolicy Bypass -File C:\work\check-env.ps1
+    用法：powershell -NoProfile -ExecutionPolicy Bypass -File C:\Users\mazix\work\check-env.ps1
     不写任何系统位置，只在本机临时目录里做一次 docx->pdf 验证。
 #>
 $ErrorActionPreference = 'Continue'
@@ -11,7 +11,7 @@ $Py   = Join-Path $Dep 'python\python.exe'
 $Node = Join-Path $Dep 'node\bin\node.exe'
 $Pnpm = Join-Path $Dep 'pnpm\bin\pnpm.mjs'
 $Cli  = 'C:\Users\mazix\AppData\Local\Programs\DeepSeek Harness\resources\app.asar.unpacked\dsh\node_modules\@deepseek-ai\libreoffice-kit\lib\cli.js'
-$GitPortable = 'C:\work\tools\PortableGit\cmd\git.exe'
+$GitPortable = 'C:\Users\mazix\work\tools\PortableGit\cmd\git.exe'
 
 $results = New-Object System.Collections.Generic.List[object]
 function Add-Result($name, $ok, $detail) {
@@ -45,7 +45,7 @@ if ($gitExe) {
     $r = Try-Run $gitExe @('--version')
     $where = if ($cmd) { 'PATH 中' } else { '便携版（PATH 未生效）' }
     Add-Result 'Git' $r.ok ("{0}  [{1}]" -f $r.out, $where)
-} else { Add-Result 'Git' $false 'PATH 和 C:\work\tools\PortableGit 都没有' }
+} else { Add-Result 'Git' $false 'PATH 和 C:\Users\mazix\work\tools\PortableGit 都没有' }
 
 # 4. Office 引擎
 $officeOk = $false
@@ -77,15 +77,15 @@ if ($officeOk) {
 
 # 6. 指令文件
 $hasGlobal = Test-Path 'C:\Users\mazix\.dsh\AGENTS.md'
-$hasProject = Test-Path 'C:\work\AGENTS.md'
+$hasProject = Test-Path 'C:\Users\mazix\work\AGENTS.md'
 Add-Result '全局 AGENTS.md' $hasGlobal 'C:\Users\mazix\.dsh\AGENTS.md'
-Add-Result '项目 AGENTS.md' $hasProject 'C:\work\AGENTS.md'
+Add-Result '项目 AGENTS.md' $hasProject 'C:\Users\mazix\work\AGENTS.md'
 
 # 7. 工作台仓库
-if ($gitExe -and (Test-Path 'C:\work\.git')) {
-    $r = Try-Run $gitExe @('-C', 'C:\work', 'log', '-1', '--oneline')
+if ($gitExe -and (Test-Path 'C:\Users\mazix\work\.git')) {
+    $r = Try-Run $gitExe @('-C', 'C:\Users\mazix\work', 'log', '-1', '--oneline')
     Add-Result '工作台仓库' $r.ok $r.out
-} else { Add-Result '工作台仓库' $false 'C:\work 尚未 git init' }
+} else { Add-Result '工作台仓库' $false 'C:\Users\mazix\work 尚未 git init' }
 
 # 8. 磁盘
 try {

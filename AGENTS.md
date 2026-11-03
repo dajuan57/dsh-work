@@ -1,6 +1,6 @@
-# C:\work 工作区约定
+# C:\Users\mazix\work 工作区约定
 
-> 本文件会被 DSH 自动加载（AGENTS.md 链）。C:\work 里有 `.git`，因此它是"项目根"。
+> 本文件会被 DSH 自动加载（AGENTS.md 链）。C:\Users\mazix\work 里有 `.git`，因此它是"项目根"。
 
 ## 这个目录是什么
 
@@ -23,7 +23,7 @@
   `...\dependencies\node\bin\node.exe`
   `...\dependencies\pnpm\bin\pnpm.mjs`（不在 PATH，用绝对路径）
 - **Git 2.56（便携版，无需管理员）**
-  `C:\work\tools\PortableGit\cmd\git.exe`
+  `C:\Users\mazix\work\tools\PortableGit\cmd\git.exe`
 - **Office / PDF 引擎：用自带的，不要装系统 LibreOffice**
 
   ```text
@@ -51,11 +51,9 @@
 
 中文。先结论后细节，结尾给"改了什么 + 怎么验证"。
 
-## 已知事项：C:\work 的 ACL（2026-11-03）
+## 权限铁律（2026-11-03 踩过的坑）
 
-- 首次在沙箱内执行命令时曾报 `SetNamedSecurityInfoW ... grantWrite(C:\work)`。
-- 原因：C:\work 建在 C: 盘根目录，继承的 DACL 只给登录用户 `Modify`，**不含 WRITE_OWNER**；而 DSH 沙箱要在一次 `SetNamedSecurityInfoW` 里完成三件事（给按路径派生的 `S-1-4-…` 能力 SID 授权、对 `Everyone` 拒绝 `FILE_DELETE_CHILD`、给目录打 Low 完整性标签），这一步需要 WRITE_OWNER。
-- 处理：给登录用户补了 C:\work 的完全控制（仅此目录，未改所有者）。报告与回滚脚本在 `~/.dsh/acl-reports/`。
-- 不是损坏：旧工作区的 ACL 里同样有这三条，属于沙箱的设计行为。
-- 副作用：C:\work 下对象为 Low 完整性；删除只认文件自身的 `DELETE` 权限（继承的 Modify 已含，实测正常）。
-- 规避办法：工作区放 `C:\Users\<用户名>\` 下，继承用户完全控制，天然带 WRITE_OWNER。
+1. **工作台放 C:\Users\<用户名>\ 下，不要放 C:\ 根目录。** 根目录继承的 ACL 只有 Modify，缺 WRITE_OWNER，DSH 沙箱无法完成授权。
+2. **先让沙箱授权，再往工作区放文件。** 授权（能力 SID + Everyone 拒绝 FILE_DELETE_CHILD + Low 标签）加在根目录上，只对之后创建的对象生效；已存在的子目录不回填，表现为"读得了、写不了"。
+3. 判断是否正常：icacls <工作区根> 应同时出现 S-1-4-...、Everyone:(CI)(DENY)(DC)、Mandatory Label\Low Mandatory Level，且用户项带 (I)(OI)(CI)。
+4. 沙箱进程是**低完整性**：能读中完整性文件，不能写。所以"能读不能写"多半不是 ACL 配错，而是对象没被标 Low。
