@@ -50,3 +50,12 @@
 ## 回复
 
 中文。先结论后细节，结尾给"改了什么 + 怎么验证"。
+
+## 已知事项：C:\work 的 ACL（2026-11-03）
+
+- 首次在沙箱内执行命令时曾报 `SetNamedSecurityInfoW ... grantWrite(C:\work)`。
+- 原因：C:\work 建在 C: 盘根目录，继承的 DACL 只给登录用户 `Modify`，**不含 WRITE_OWNER**；而 DSH 沙箱要在一次 `SetNamedSecurityInfoW` 里完成三件事（给按路径派生的 `S-1-4-…` 能力 SID 授权、对 `Everyone` 拒绝 `FILE_DELETE_CHILD`、给目录打 Low 完整性标签），这一步需要 WRITE_OWNER。
+- 处理：给登录用户补了 C:\work 的完全控制（仅此目录，未改所有者）。报告与回滚脚本在 `~/.dsh/acl-reports/`。
+- 不是损坏：旧工作区的 ACL 里同样有这三条，属于沙箱的设计行为。
+- 副作用：C:\work 下对象为 Low 完整性；删除只认文件自身的 `DELETE` 权限（继承的 Modify 已含，实测正常）。
+- 规避办法：工作区放 `C:\Users\<用户名>\` 下，继承用户完全控制，天然带 WRITE_OWNER。
