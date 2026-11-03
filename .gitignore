@@ -1,0 +1,23 @@
+# 密钥与本地配置，永不入库
+.env
+.env.*
+!.env.example
+
+# 便携工具与缓存
+tools/
+node_modules/
+.npm-cache/
+__pycache__/
+*.pyc
+
+# 临时产物
+tmp/
+*.log
+*.tmp
+~$*
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
