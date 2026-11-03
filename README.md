@@ -31,6 +31,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\new-project.ps1 -Nam
 | Node 24 | `C:\Users\mazix\.dsh\dsh-runtimes\dsh-primary-runtime\dependencies\node\bin\node.exe` |
 | pnpm | 用 `node <…\pnpm\bin\pnpm.mjs>` 调（不在 PATH） |
 | Git 2.56 | `C:\Users\mazix\work\tools\PortableGit\cmd\git.exe`（已入 PATH） |
+| VS Code | `C:\Users\mazix\AppData\Local\Programs\Microsoft VS Code\bin\code.cmd`（重启终端后可直接 `code`） |
+| uv | winget 装在 `…\WinGet\Packages\astral-sh.uv_…\uv.exe`，重启终端后 `uv` 直接在 PATH |
 | Office/PDF | DSH 自带 `libreoffice-kit`，见 `AGENTS.md` |
 
 ## 约定

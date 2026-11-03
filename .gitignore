@@ -21,6 +21,9 @@ tmp/
 *.tmp
 ~$*
 
+# 权限修复的审计与回滚档案（本机专用，不入库）
+notes/acl-reports/
+
 # 编辑器 / 系统
 .vscode/
 .idea/
