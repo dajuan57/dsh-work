@@ -1,11 +1,11 @@
 # 统一换行与二进制识别，避免跨平台 diff 噪音
+# 本工作区一切文本统一 LF（DSH 文件工具写 LF；Windows 脚本同样兼容 LF）
 * text=auto
 
-# Windows 脚本保留 CRLF，其余源码统一 LF
-*.ps1    text eol=crlf
-*.psm1   text eol=crlf
-*.cmd    text eol=crlf
-*.bat    text eol=crlf
+*.ps1    text eol=lf
+*.psm1   text eol=lf
+*.cmd    text eol=lf
+*.bat    text eol=lf
 *.sh     text eol=lf
 *.py     text eol=lf
 *.js     text eol=lf

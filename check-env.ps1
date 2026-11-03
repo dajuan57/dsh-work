@@ -28,12 +28,12 @@ if (Test-Path $Py) {
     Add-Result 'Python' $r.ok $r.out
 } else { Add-Result 'Python' $false "未找到 $Py" }
 
-# 1b. 共享 venv（工作台根目录 .venv；pip 只能用 -m pip 调）
+# 1b. 共享 venv（工作台根目录 .venv；pip 用 -m pip 调；核心库来自系统 Python 的 site-packages）
 $VenvPy = 'C:\Users\mazix\work\.venv\Scripts\python.exe'
 if (Test-Path $VenvPy) {
-    $r = Try-Run $VenvPy @('-m', 'pip', '--version')
-    Add-Result 'venv + pip' $r.ok $r.out
-} else { Add-Result 'venv + pip' $false "未找到 $VenvPy" }
+    $r = Try-Run $VenvPy @('-c', 'import numpy,pandas,openpyxl,docx,pptx,PIL,lxml,xlsxwriter,pip as p;print(p.__version__,numpy.__version__,pandas.__version__)')
+    Add-Result 'venv（pip+核心库）' $r.ok $r.out
+} else { Add-Result 'venv（pip+核心库）' $false "未找到 $VenvPy" }
 
 # 2. Node / pnpm
 if (Test-Path $Node) {
@@ -106,3 +106,4 @@ $results | Format-Table -AutoSize -Wrap | Out-String | Write-Host
 $fail = @($results | Where-Object { $_.结果 -eq 'FAIL' }).Count
 if ($fail -eq 0) { Write-Host "全部通过（$($results.Count) 项）" -ForegroundColor Green }
 else { Write-Host "$fail / $($results.Count) 项未通过，见上表" -ForegroundColor Yellow }
+exit $fail

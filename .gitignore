@@ -7,8 +7,9 @@
 projects/*
 !projects/_template/
 
-# 便携工具与缓存
-tools/
+# 便携工具与缓存：目录内容不入库，但脚手架脚本要入
+tools/*
+!tools/new-project.ps1
 .venv/
 node_modules/
 .npm-cache/
