@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+.ssh/
 
 # 子项目各自是独立仓库，父仓库不跟踪；模板本身要保留
 projects/*
