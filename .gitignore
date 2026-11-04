@@ -8,6 +8,9 @@
 projects/*
 !projects/_template/
 
+# 数据与素材（可能含客户隐私/大文件），不入库
+data/
+
 # 便携工具与缓存：目录内容不入库，但脚手架脚本要入
 tools/*
 !tools/new-project.ps1
